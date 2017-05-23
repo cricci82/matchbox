@@ -22,6 +22,7 @@ parallel (
     node('fedora && bare-metal') {
       stage('bootkube') {
         timeout(time:12, unit:'MINUTES') {
+          deleteDir()
           checkout scm          
           sh '''#!/bin/bash -e
           chmod 600 ./tests/smoke/fake_rsa
@@ -38,6 +39,19 @@ parallel (
           checkout scm
           sh '''#!/bin/bash -e
           export ASSETS_DIR=~/assets; export CONFIG_DIR=~/matchbox/examples/etc/matchbox; ./tests/smoke/etcd3-terraform
+          '''
+        }
+      }
+    }
+  },
+  "bootkube-terraform": {
+    node('fedora && bare-metal') {
+      stage('bootkube-terraform') {
+        timeout(time:15, unit:'MINUTES') {
+          deleteDir()
+          checkout scm
+          sh '''#!/bin/bash -e
+          export ASSETS_DIR=~/assets; export CONFIG_DIR=~/matchbox/examples/etc/matchbox; ./tests/smoke/bootkube-terraform
           '''
         }
       }
